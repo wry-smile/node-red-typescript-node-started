@@ -12,8 +12,8 @@ RED.nodes.registerType<{{properCase name}}ClientNodeProperties>("{{ kebabCase na
   inputs: 1,
   outputs: 1,
   icon: "file.png",
-  paletteLabel: "{{ properCase name }}",
+  paletteLabel: "{{ kebabCase name }}",
   label: function () {
-    return this.name || "{{ properCase name }}";
+    return this.name || "{{ kebabCase name }}";
   },
 });
