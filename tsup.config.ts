@@ -1,11 +1,9 @@
 import { defineConfig, Options, } from 'tsup'
 import { Plugin } from 'esbuild'
-import packageJSON from './package.json'
 import { dirname, join, resolve } from 'path'
 import { glob } from 'glob'
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs'
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs'
 
-const allNodeTypes = Object.keys(packageJSON['node-red'].nodes)
 
 function bundleHTML(node: string): Plugin {
   return {
@@ -70,6 +68,8 @@ function generatePackageJSON(node: string) {
 }
 
 function createBundles(): Options[] {
+const allNodeTypes = readdirSync(resolve('./src/nodes'))
+
   return allNodeTypes.reduce((prev, next) => {
 
     const nodeEntry: Options[] = [
