@@ -1,0 +1,5 @@
+import { Node, NodeDef } from "node-red";
+import { {{ properCase name }}Options } from "../types";
+
+export interface {{ properCase name }}NodeDef extends NodeDef, {{ properCase name }}Options {}
+export type {{ properCase name }}Node = Node;

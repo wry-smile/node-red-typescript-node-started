@@ -1,0 +1,15 @@
+import { NodeInitializer } from "node-red";
+import { {{ properCase name }}Node, {{ properCase name }}NodeDef } from "./types";
+
+const nodeInit: NodeInitializer = (RED): void => {
+  function {{ properCase name }}NodeConstructor(
+    this: {{ properCase name }}Node,
+    config: {{ properCase name }}NodeDef
+  ): void {
+    RED.nodes.createNode(this, config);
+  }
+
+  RED.nodes.registerType("{{ kebabCase name }}", {{ properCase name }}NodeConstructor);
+};
+
+export = nodeInit;
