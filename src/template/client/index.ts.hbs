@@ -1,5 +1,5 @@
-import { EditorRED } from "node-red";
-import { {{ properCase name }}ClientNodeProperties } from "./types";
+import type { EditorRED } from "node-red";
+import type { {{ properCase name }}ClientNodeProperties } from "./types";
 
 declare const RED: EditorRED;
 
@@ -13,7 +13,7 @@ RED.nodes.registerType<{{properCase name}}ClientNodeProperties>("{{ kebabCase na
   outputs: 1,
   icon: "file.png",
   paletteLabel: "{{ kebabCase name }}",
-  label: function () {
+  label() {
     return this.name || "{{ kebabCase name }}";
   },
 });

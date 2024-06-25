@@ -1,5 +1,5 @@
-import { NodeInitializer } from "node-red";
-import { TransformTextNode, TransformTextNodeDef } from "./types";
+import type { NodeInitializer } from "node-red";
+import type { TransformTextNode, TransformTextNodeDef } from "./types";
 
 const nodeInit: NodeInitializer = (RED): void => {
   function TransformTextNodeConstructor(
@@ -12,4 +12,4 @@ const nodeInit: NodeInitializer = (RED): void => {
   RED.nodes.registerType("transform-text", TransformTextNodeConstructor);
 };
 
-export = nodeInit;
+export default nodeInit;
