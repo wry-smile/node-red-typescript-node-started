@@ -2,15 +2,15 @@
   "name": "node-red-typescript-node-started",
   "version": "1.0.0",
   "description": "",
+  "author": "",
+  "license": "MIT",
+  "keywords": [],
   "main": "index.js",
   "scripts": {
     "build": "tsup",
     "add-node": "plop --plopfile ./add-node.js",
     "dev": "tsup --watch"
   },
-  "keywords": [],
-  "author": "",
-  "license": "MIT",
   "dependencies": {
     "@wry-smile/utils": "^1.1.2",
     "typescript": "^5.5.2"
