@@ -86,6 +86,7 @@ function createBundles(): Options[] {
         format: ['cjs'],
         clean: true,
         splitting: true,
+        watch: `./src/nodes/${next}/runtime/*`,
       },
       {
         name: 'client',
@@ -100,6 +101,7 @@ function createBundles(): Options[] {
           createNodePackageJSONPlugin(next),
           createLocalePlugin(next),
         ],
+        watch: `./src/nodes/${next}/client/*`,
       },
     ]
     return [...prev, ...nodeEntry]

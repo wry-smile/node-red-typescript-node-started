@@ -76,6 +76,13 @@ module.exports = function (
             templateFile: 'src/template/locales/index.html.hbs',
           }
         }),
+        ...locales.map((key) => {
+          return {
+            type: 'add',
+            path: `src/nodes/{{ kebabCase name }}/locales/${key}/{{ kebabCase name }}.json`,
+            templateFile: 'src/template/locales/index.json',
+          }
+        }),
       ]
     },
   })
