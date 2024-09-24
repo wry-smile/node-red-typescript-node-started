@@ -84,18 +84,14 @@ function createBundles(): Options[] {
         },
         outDir: resolve(`./dist/${next}`),
         format: ['cjs'],
-        clean: true,
         splitting: true,
         watch: `./src/nodes/${next}/runtime/*`,
       },
       {
         name: 'client',
-        entry: {
-          [`${next}.html`]: resolve(`./src/nodes/${next}/client/index.ts`),
-        },
+        entry: [resolve(`./src/nodes/${next}/client/index.ts`)],
         outDir: resolve(`./dist/${next}`),
         format: ['iife'],
-        clean: true,
         plugins: [
           createHTMLPlugin(next),
           createNodePackageJSONPlugin(next),
