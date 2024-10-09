@@ -4,7 +4,8 @@ import type { Options } from 'tsup'
 import { defineConfig } from 'tsup'
 import { glob } from 'glob'
 
-type ESBuildPlugin = Required<Options>['plugins'][number]
+type TsUpPlugin = Required<Options>['plugins'][number]
+type EsbuildPlugin = Required<Options>['esbuildPlugins'][number]
 
 function copyDir(src: string, dest: string) {
   mkdirSync(dest, { recursive: true })
@@ -24,23 +25,27 @@ function copyDir(src: string, dest: string) {
   }
 }
 
-function createHTMLPlugin(node: string): ESBuildPlugin {
+function mergeHTMLPlugin(node: string): EsbuildPlugin {
   return {
-    name: 'node-red-html-plugin',
-    renderChunk(code) {
+    name: 'node-red-merge-html-plugin',
+    setup(build) {
       const htmlFiles = glob.sync(join(`./src/nodes/${node}/client`, '*.html').replaceAll(/\\/g, '/'))
       const htmlContents = htmlFiles.map(filePath => readFileSync(filePath))
-      code
-        = `<script type="text/javascript">\n${code
-        }\n`
-        + `</script>\n${htmlContents.join('\n')}`
 
-      writeFileSync(join(`./dist/${node}`, `${node}.html`), code, 'utf-8')
+      build.onEnd((result) => {
+        for (const item of result.outputFiles || []) {
+          const decoder = new TextDecoder('utf-8')
+          let code = decoder.decode(item.contents)
+          const encoder = new TextEncoder()
+          code = `<script type="text/javascript">\n ${code}</script>\n${htmlContents.join('\n')}`
+          item.contents = encoder.encode(code)
+        }
+      })
     },
   }
 }
 
-function createNodePackageJSONPlugin(node: string): ESBuildPlugin {
+function createNodePackageJSONPlugin(node: string): TsUpPlugin {
   return {
     name: 'node-red-node-package',
     buildEnd() {
@@ -62,7 +67,7 @@ function createNodePackageJSONPlugin(node: string): ESBuildPlugin {
   }
 }
 
-function createLocalePlugin(node: string): ESBuildPlugin {
+function createLocalePlugin(node: string): TsUpPlugin {
   return {
     name: 'node-red-locale',
     buildEnd() {
@@ -89,14 +94,16 @@ function createBundles(): Options[] {
       },
       {
         name: 'client',
-        entry: [resolve(`./src/nodes/${next}/client/index.ts`)],
+        entry: {
+          [next]: resolve(`./src/nodes/${next}/client/index.ts`),
+        },
         outDir: resolve(`./dist/${next}`),
         format: ['iife'],
         plugins: [
-          createHTMLPlugin(next),
           createNodePackageJSONPlugin(next),
           createLocalePlugin(next),
         ],
+        esbuildPlugins: [mergeHTMLPlugin(next)],
         watch: `./src/nodes/${next}/client/*`,
       },
     ]
