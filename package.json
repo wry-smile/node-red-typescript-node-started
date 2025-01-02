@@ -9,6 +9,7 @@
   "scripts": {
     "build": "tsup --config tsup.config.ts",
     "add-node": "plop --plopfile ./add-node.js",
+    "add-plugin": "plop --plopfile ./add-plugin.js",
     "dev": "tsup --config tsup.config.watch.ts"
   },
   "dependencies": {

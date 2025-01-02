@@ -1,0 +1,13 @@
+{
+  "name": "node-red-transform-text",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "node-red": {
+    "nodes": {
+      "transform-text": "transform-text.js"
+    }
+  }
+}

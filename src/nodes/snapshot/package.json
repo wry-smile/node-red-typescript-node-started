@@ -1,0 +1,13 @@
+{
+  "name": "node-red-snapshot",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "node-red": {
+    "plugins": {
+      "snapshot": "snapshot.js"
+    }
+  }
+}

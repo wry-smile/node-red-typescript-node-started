@@ -49,20 +49,8 @@ function createNodePackageJSONPlugin(node: string): TsUpPlugin {
   return {
     name: 'node-red-node-package',
     buildEnd() {
-      const json = {
-        'name': `node-red-thingskit-${node}`,
-        'version': '1.0.0',
-        'description': '',
-        'keywords': [],
-        'author': '',
-        'license': 'ISC',
-        'node-red': {
-          nodes: {
-            [node]: `${node}.js`,
-          },
-        },
-      }
-      writeFileSync(join(`./dist/${node}`, `package.json`), JSON.stringify(json, null, 2), 'utf-8')
+      const packageJsonPath = resolve(`./src/nodes/${node}/package.json`)
+      copyFileSync(packageJsonPath, resolve(`./dist/${node}/package.json`))
     },
   }
 }

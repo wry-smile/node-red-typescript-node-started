@@ -20,12 +20,12 @@ module.exports = function (
   /** @type {import('plop').NodePlopAPI} */
   plop,
 ) {
-  plop.setGenerator('Add-Node', {
+  plop.setGenerator('Add-Plugin', {
     prompts: [
       {
         type: 'input',
         name: 'name',
-        message: 'Please enter the node name?',
+        message: 'Please enter the plugin name?',
       },
       {
         type: 'checkbox',
@@ -42,50 +42,28 @@ module.exports = function (
         {
           type: 'add',
           path: 'src/nodes/{{ kebabCase name }}/types/index.ts',
-          templateFile: 'src/template/types/index.ts.hbs',
+          templateFile: 'src/template-plugin/types/index.ts.hbs',
         },
         {
           type: 'add',
           path: 'src/nodes/{{ kebabCase name }}/runtime/index.ts',
-          templateFile: 'src/template/runtime/index.ts.hbs',
-        },
-        {
-          type: 'add',
-          path: 'src/nodes/{{ kebabCase name }}/runtime/types.ts',
-          templateFile: 'src/template/runtime/types.ts.hbs',
+          templateFile: 'src/template-plugin/runtime/index.ts.hbs',
         },
         {
           type: 'add',
           path: 'src/nodes/{{ kebabCase name }}/client/index.ts',
-          templateFile: 'src/template/client/index.ts.hbs',
-        },
-        {
-          type: 'add',
-          path: 'src/nodes/{{ kebabCase name }}/client/types.ts',
-          templateFile: 'src/template/client/types.ts.hbs',
-        },
-        {
-          type: 'add',
-          path: 'src/nodes/{{ kebabCase name }}/client/editor.html',
-          templateFile: 'src/template/client/editor.html.hbs',
+          templateFile: 'src/template-plugin/client/index.ts.hbs',
         },
         {
           type: 'add',
           path: 'src/nodes/{{ kebabCase name }}/package.json',
-          templateFile: 'src/template/package.json.hbs',
+          templateFile: 'src/template-plugin/package.json.hbs',
         },
         ...locales.map((key) => {
           return {
             type: 'add',
-            path: `src/nodes/{{ kebabCase name }}/locales/${key}/{{ kebabCase name }}.html`,
-            templateFile: 'src/template/locales/index.html.hbs',
-          }
-        }),
-        ...locales.map((key) => {
-          return {
-            type: 'add',
             path: `src/nodes/{{ kebabCase name }}/locales/${key}/{{ kebabCase name }}.json`,
-            templateFile: 'src/template/locales/index.json',
+            templateFile: 'src/template-plugin/locales/index.json',
           }
         }),
       ]

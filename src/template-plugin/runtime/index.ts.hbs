@@ -1,0 +1,12 @@
+import type { NodeInitializer } from "node-red";
+
+const pluginInit: NodeInitializer = (RED): void => {
+ RED.plugins.registerPlugin("{{ kebabCase name }}", {
+    type: "{{ properCase name }}",
+    onadd() {
+
+    }
+  })
+};
+
+export default pluginInit;
