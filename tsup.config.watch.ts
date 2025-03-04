@@ -1,8 +1,8 @@
-import { join, resolve } from 'node:path'
-import { copyFileSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs'
 import type { Options } from 'tsup'
-import { defineConfig } from 'tsup'
+import { copyFileSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
+import { join, resolve } from 'node:path'
 import { glob } from 'glob'
+import { defineConfig } from 'tsup'
 
 type TsUpPlugin = Required<Options>['plugins'][number]
 type EsbuildPlugin = Required<Options>['esbuildPlugins'][number]
@@ -84,16 +84,21 @@ function createBundles(): Options[] {
     const nodeEntry: Options[] = [
       {
         name: 'runtime',
+        platform: 'node',
         entry: {
           [next]: resolve(`./src/nodes/${next}/runtime/index.ts`),
         },
         outDir: resolve(`./dist/${next}`),
         format: ['cjs'],
         splitting: true,
+        cjsInterop: true,
+        noExternal: [/.*/],
+        publicDir: resolve(`./src/nodes/${next}/public`),
         watch: `./src/nodes/${next}/runtime/*`,
       },
       {
         name: 'client',
+        platform: 'browser',
         entry: {
           [next]: resolve(`./src/nodes/${next}/client/index.ts`),
         },
@@ -104,6 +109,12 @@ function createBundles(): Options[] {
           createLocalePlugin(next),
         ],
         esbuildPlugins: [mergeHTMLPlugin(next)],
+        noExternal: [/.*/],
+        outExtension: () => {
+          return {
+            js: '.html',
+          }
+        },
         watch: `./src/nodes/${next}/client/*`,
       },
     ]

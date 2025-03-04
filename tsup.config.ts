@@ -1,8 +1,8 @@
-import { join, resolve } from 'node:path'
-import { copyFileSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs'
 import type { Options } from 'tsup'
-import { defineConfig } from 'tsup'
+import { copyFileSync, mkdirSync, readdirSync, readFileSync, statSync } from 'node:fs'
+import { join, resolve } from 'node:path'
 import { glob } from 'glob'
+import { defineConfig } from 'tsup'
 
 type TsUpPlugin = Required<Options>['plugins'][number]
 type EsbuildPlugin = Required<Options>['esbuildPlugins'][number]
