@@ -72,6 +72,7 @@ function createBundles(): Options[] {
     const nodeEntry: Options[] = [
       {
         name: 'runtime',
+        platform: 'node',
         entry: {
           [next]: resolve(`./src/nodes/${next}/runtime/index.ts`),
         },
@@ -79,9 +80,13 @@ function createBundles(): Options[] {
         format: ['cjs'],
         clean: true,
         splitting: true,
+        cjsInterop: true,
+        noExternal: [/.*/],
+        publicDir: resolve(`./src/nodes/${next}/public`),
       },
       {
         name: 'client',
+        platform: 'browser',
         entry: {
           [next]: resolve(`./src/nodes/${next}/client/index.ts`),
         },
@@ -93,6 +98,7 @@ function createBundles(): Options[] {
           createLocalePlugin(next),
         ],
         esbuildPlugins: [mergeHTMLPlugin(next)],
+        noExternal: [/.*/],
         outExtension: () => {
           return {
             js: '.html',
