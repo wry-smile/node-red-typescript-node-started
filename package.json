@@ -1,34 +1,37 @@
 {
-  "name": "node-red-typescript-node-started",
-  "version": "1.0.0",
+  "name": "@wry-smile/node-red-typescript-node-started",
+  "version": "1.1.0",
   "description": "",
   "author": "",
   "license": "MIT",
   "keywords": [],
   "main": "index.js",
   "scripts": {
-    "build": "tsup --config tsup.config.ts",
-    "add-node": "plop --plopfile ./add-node.js",
-    "add-plugin": "plop --plopfile ./add-plugin.js",
-    "dev": "tsup --config tsup.config.watch.ts"
+    "build": "tsup",
+    "scaffold": "plop --plopfile ./scripts/scaffold.js",
+    "dev": "tsup --watch"
   },
   "dependencies": {
     "@wry-smile/utils": "^1.1.2",
-    "typescript": "^5.8.2"
+    "typescript": "^5.9.3"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^4.4.0",
+    "@antfu/eslint-config": "^6.7.1",
     "@rollup/plugin-json": "^6.1.0",
-    "@types/express": "^5.0.0",
-    "@types/node": "^22.13.9",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.0.2",
     "@types/node-red": "^1.3.5",
-    "esbuild": "^0.25.0",
-    "eslint": "^9.21.0",
-    "glob": "^11.0.1",
-    "mqtt": "^5.10.4",
-    "node-red": "^4.0.9",
-    "plop": "^4.0.1",
-    "tsup": "^8.4.0"
+    "autoprefixer": "^10.4.23",
+    "esbuild": "^0.27.1",
+    "eslint": "^9.39.2",
+    "eslint-plugin-format": "^1.1.0",
+    "glob": "^13.0.0",
+    "node-red": "^4.1.2",
+    "plop": "^4.0.4",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18",
+    "tsup": "^8.5.1"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

@@ -1,13 +1,13 @@
 {
-  "name": "node-red-snapshot",
+  "name": "node-red-simple-node",
   "version": "1.0.0",
+  "author": "",
   "description": "",
   "keywords": [],
-  "author": "",
   "license": "ISC",
   "node-red": {
-    "plugins": {
-      "snapshot": "snapshot.js"
+    "nodes": {
+      "simple-node": "simple-node.js"
     }
   }
 }
