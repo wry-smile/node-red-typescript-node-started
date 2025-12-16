@@ -12,8 +12,8 @@ const config: BuildConfig = {
   },
   outDir: 'dist',
   output: {
-    type: 'flat',
-    // type: 'merge',
+    // type: 'flat',
+    type: 'merge',
     // merge: {
     //   rootPackage: {
     //     name: 'node-red-merge',
