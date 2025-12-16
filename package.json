@@ -7,31 +7,30 @@
   "keywords": [],
   "main": "index.js",
   "scripts": {
-    "build": "tsup",
-    "scaffold": "plop --plopfile ./scripts/scaffold.js",
-    "dev": "tsup --watch"
+    "build": "tsx build/index.ts",
+    "scaffold": "plop --plopfile ./scripts/scaffold.js"
   },
   "dependencies": {
     "@wry-smile/utils": "^1.1.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vue": "^3.5.25"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^6.7.1",
-    "@rollup/plugin-json": "^6.1.0",
-    "@tailwindcss/postcss": "^4.1.18",
+    "@tailwindcss/vite": "^4.1.18",
     "@types/express": "^5.0.6",
     "@types/node": "^25.0.2",
     "@types/node-red": "^1.3.5",
-    "autoprefixer": "^10.4.23",
-    "esbuild": "^0.27.1",
+    "@vitejs/plugin-vue": "^6.0.3",
     "eslint": "^9.39.2",
     "eslint-plugin-format": "^1.1.0",
     "glob": "^13.0.0",
     "node-red": "^4.1.2",
     "plop": "^4.0.4",
-    "postcss": "^8.5.6",
     "tailwindcss": "^4.1.18",
-    "tsup": "^8.5.1"
+    "tsx": "^4.21.0",
+    "vite": "^7.3.0",
+    "vite-plugin-singlefile": "^2.3.0"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

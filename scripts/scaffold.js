@@ -52,6 +52,11 @@ module.exports = function (
       const baseActions = [
         {
           type: 'add',
+          path: `${baseDir}/{{ kebabCase name }}/client/editor.html`,
+          templateFile: `${templateDir}/client/editor.html.hbs`,
+        },
+        {
+          type: 'add',
           path: `${baseDir}/{{ kebabCase name }}/types/index.ts`,
           templateFile: `${templateDir}/types/index.ts.hbs`,
         },
@@ -83,11 +88,6 @@ module.exports = function (
             type: 'add',
             path: `${baseDir}/{{ kebabCase name }}/client/types.ts`,
             templateFile: `${templateDir}/client/types.ts.hbs`,
-          },
-          {
-            type: 'add',
-            path: `${baseDir}/{{ kebabCase name }}/client/editor.html`,
-            templateFile: `${templateDir}/client/editor.html.hbs`,
           },
         )
       }

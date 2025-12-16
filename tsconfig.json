@@ -6,8 +6,8 @@
       "dom"
     ],
     "baseUrl": "./",
-    "module": "CommonJS",
-    "moduleResolution": "node",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "paths": {
       "@/*": [
         "./src/*"

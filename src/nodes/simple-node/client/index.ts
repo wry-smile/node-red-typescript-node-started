@@ -1,5 +1,7 @@
 import type { EditorRED } from 'node-red'
 import type { SimpleNodeClientNodeProperties } from './types'
+import { createApp } from 'vue'
+import AppComponent from './app-component.vue'
 
 declare const RED: EditorRED
 
@@ -15,5 +17,8 @@ RED.nodes.registerType<SimpleNodeClientNodeProperties>('simple-node', {
   paletteLabel: 'simple-node',
   label() {
     return this.name || 'simple-node'
+  },
+  oneditprepare() {
+    createApp(AppComponent).mount('#simple-node-app')
   },
 })
