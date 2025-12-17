@@ -18,6 +18,7 @@
       "./src/types",
       "./node_modules/@types"
     ],
+    "allowImportingTsExtensions": true,
     "allowJs": false,
     "strict": true,
     "strictNullChecks": true,
@@ -26,7 +27,7 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "importHelpers": false,
-    "noEmit": false,
+    "noEmit": true,
     "noEmitOnError": true,
     "outDir": "dist",
     "preserveConstEnums": true,
@@ -39,7 +40,8 @@
   },
   "include": [
     "**/*.ts",
-    "add-node.js"
+    "add-node.js",
+    "build.config.mts"
   ],
   "exclude": [
     "node_modules"

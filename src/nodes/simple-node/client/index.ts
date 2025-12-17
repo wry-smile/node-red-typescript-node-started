@@ -2,6 +2,7 @@ import type { EditorRED } from 'node-red'
 import type { SimpleNodeClientNodeProperties } from './types'
 import { createApp } from 'vue'
 import AppComponent from './app-component.vue'
+import './tailwind.css'
 
 declare const RED: EditorRED
 

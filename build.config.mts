@@ -1,14 +1,17 @@
-import type { BuildConfig } from './build/config'
+import type { BuildConfig } from './build/config.ts'
 
 const config: BuildConfig = {
   kinds: ['nodes', 'plugins'],
   allow: {
-    nodes: [],
+    nodes: [
+    ],
     plugins: [],
   },
   ignore: {
-    nodes: [],
-    plugins: [],
+    nodes: [
+    ],
+    plugins: [
+    ],
   },
   outDir: 'dist',
   output: {
