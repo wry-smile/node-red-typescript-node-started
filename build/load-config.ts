@@ -17,14 +17,14 @@ async function importConfigFile(filePath: string): Promise<BuildConfig | null> {
     const config = module.default || module.config
 
     if (!config) {
-      console.warn(`配置文件 ${path.basename(filePath)} 未导出默认值或 config 对象`)
+      console.warn(`Config file ${path.basename(filePath)} did not export default value or config object`)
       return null
     }
 
     return config as BuildConfig
   }
   catch (e) {
-    console.error(`加载配置文件失败: ${filePath}`)
+    console.error(`Load configuration file failed: ${filePath}`)
     console.error(e)
     return null
   }
@@ -35,7 +35,7 @@ export async function loadBuildConfig(): Promise<BuildConfig | null> {
     const configPath = path.join(repoRoot, candidate)
 
     if (pathExists(configPath)) {
-      console.log(`找到配置文件: ${candidate}`)
+      console.log(`Found configuration file: ${candidate}`)
 
       if (candidate.endsWith('.ts')) {
         try {
@@ -44,26 +44,26 @@ export async function loadBuildConfig(): Promise<BuildConfig | null> {
           const config = module.default || module.config
 
           if (config) {
-            console.log(`成功加载配置文件: ${candidate}`)
+            console.log(`Loaded configuration file: ${candidate}`)
             return config as BuildConfig
           }
         }
         catch {
-          console.warn(`无法直接加载 TypeScript 配置文件，请使用 .js 或 .mjs 格式`)
+          console.warn(`Cannot directly load TypeScript configuration file, please use .js or .mjs format`)
         }
       }
       else {
-        // .js 或 .mjs 文件
+        // .js or .mjs file
         const config = await importConfigFile(configPath)
         if (config) {
-          console.log(`成功加载配置文件: ${candidate}`)
+          console.log(`Loaded configuration file: ${candidate}`)
           return config
         }
       }
     }
   }
 
-  console.log(`未找到配置文件，使用默认配置`)
+  console.log(`Configuration file not found, using default configuration`)
   return null
 }
 

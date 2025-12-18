@@ -10,13 +10,9 @@ function handleClick() {
 
 <template>
   <div>
-    {{ number }}
+    {{ number + 2 }}
     <button class=" bg-blue-500 text-white p-2 rounded-md" @click="handleClick">
-      按钮
+      button
     </button>
-    <div>
-      1
-      23
-    </div>
   </div>
 </template>

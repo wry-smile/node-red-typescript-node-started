@@ -6,6 +6,7 @@ import chokidar from 'chokidar'
 import { build } from 'tsup'
 import { filterPackageByConfig } from './config'
 import { getFinalConfig } from './load-config'
+import { NodeRedLauncher } from './node-red-launcher'
 import { checkCustomBuild, singleBuild } from './single-build'
 import { repoRoot } from './utils'
 
@@ -39,14 +40,14 @@ async function generatePackageBuildOptionsMapping() {
 }
 
 /**
- * 从文件路径提取对应的 scope（包名）
- * 例如: /repo/src/nodes/my-node/index.ts -> my-node
+ * Extract scope (package name) from file path
+ * e.g. /repo/src/nodes/my-node/index.ts -> my-node
  */
 function extractScopeFromFilePath(filePath: string): string | null {
   const relativePath = relative(repoRoot, filePath)
   const parts = relativePath.split('/')
 
-  // 检查是否在 nodes 或 plugins 目录下
+  // Check if under nodes or plugins directory
   if (parts.length >= 3 && (parts[1] === 'nodes' || parts[1] === 'plugins')) {
     // parts[0] = 'src', parts[1] = 'nodes'|'plugins', parts[2] = scope
     return parts[2]
@@ -70,7 +71,7 @@ async function buildPackage(
 ) {
   if (changeScopes.length <= 0) {
     for (const [, mapping] of Array.from(buildOptionsMapping.entries())) {
-      buildByMapping(mapping)
+      await buildByMapping(mapping)
     }
 
     return
@@ -89,87 +90,127 @@ async function buildPackage(
 async function run() {
   const buildOptionsMapping = await generatePackageBuildOptionsMapping()
 
-  // 初始全量构建
-  console.log('🔨 初始化构建所有包...')
-  await buildPackage(buildOptionsMapping)
-  console.log('✅ 初始化构建完成\n')
+  const redLauncher = NodeRedLauncher.getInstance()
 
-  // 用于去重和防抖的变量
+  // Initial full build
+  console.log('🔨 Building all packages...')
+  await buildPackage(buildOptionsMapping)
+  console.log('✅ Initial build completed\n')
+
+  await redLauncher.start()
+
   const changedScopes = new Set<string>()
   let debounceTimer: NodeJS.Timeout | null = null
+  let isWatcherReady = false
 
   const watchPaths = [
     resolve(repoRoot, './src/nodes'),
     resolve(repoRoot, './src/plugins'),
   ]
 
-  console.log(`👀 开始监听文件变化: ${watchPaths.join(', ')}`)
-  console.log('💡 按 Ctrl+C 停止监听\n')
+  console.log(`👀 Watching file changes: ${watchPaths.join(', ')}`)
+  console.log('💡 Press Ctrl+C to stop watching\n')
+
+  const scheduleBuild = () => {
+    if (!isWatcherReady)
+      return
+
+    if (debounceTimer)
+      clearTimeout(debounceTimer)
+    debounceTimer = setTimeout(async () => {
+      if (changedScopes.size > 0) {
+        const scopesToBuild = Array.from(changedScopes)
+        console.log(`🔨 Incremental build scopes: ${scopesToBuild.join(', ')}`)
+        try {
+          await buildPackage(buildOptionsMapping, scopesToBuild)
+          console.log(`✅ Incremental build completed\n`)
+
+          // Restart Node-RED after a successful build
+          try {
+            if (redLauncher.isRunning()) {
+              await redLauncher.restart()
+            }
+            else {
+              await redLauncher.start()
+            }
+            console.log('🔁 Node-RED restarted')
+          }
+          catch (err) {
+            console.error('❌ Failed to restart Node-RED:', err)
+          }
+        }
+        catch (error) {
+          console.error(`❌ Build failed:`, error)
+        }
+        changedScopes.clear()
+      }
+      debounceTimer = null
+    }, 500)
+  }
 
   const watcher = chokidar.watch(watchPaths, {
     ignored: /(node_modules|\.git|dist|\.d\.ts|\.map)$/,
+    persistent: true,
+    ignoreInitial: true,
     awaitWriteFinish: {
       stabilityThreshold: 100,
       pollInterval: 100,
     },
   })
+    .on('ready', () => {
+      isWatcherReady = true
+      console.log('✅ File watcher is ready')
+    })
     .on('change', (filePath) => {
       const scope = extractScopeFromFilePath(filePath)
       if (scope) {
         changedScopes.add(scope)
-        console.log(`📝 文件变化: ${relative(repoRoot, filePath)} (scope: ${scope})`)
+        console.log(`📝 File changed: ${relative(repoRoot, filePath)} (scope: ${scope})`)
       }
-
-      if (debounceTimer) {
-        clearTimeout(debounceTimer)
-      }
-
-      debounceTimer = setTimeout(async () => {
-        if (changedScopes.size > 0) {
-          const scopesToBuild = Array.from(changedScopes)
-          console.log(`🔨 增量构建 scope: ${scopesToBuild.join(', ')}`)
-          try {
-            await buildPackage(buildOptionsMapping, scopesToBuild)
-            console.log(`✅ 增量构建完成\n`)
-          }
-          catch (error) {
-            console.error(`❌ 构建失败:`, error)
-          }
-          changedScopes.clear()
-        }
-        debounceTimer = null
-      }, 500)
+      scheduleBuild()
     })
     .on('add', (filePath) => {
       const scope = extractScopeFromFilePath(filePath)
       if (scope) {
         changedScopes.add(scope)
-        console.log(`✨ 新增文件: ${relative(repoRoot, filePath)} (scope: ${scope})`)
+        console.log(`✨ File added: ${relative(repoRoot, filePath)} (scope: ${scope})`)
       }
+      scheduleBuild()
     })
     .on('unlink', (filePath) => {
       const scope = extractScopeFromFilePath(filePath)
       if (scope) {
         changedScopes.add(scope)
-        console.log(`🗑️ 删除文件: ${relative(repoRoot, filePath)} (scope: ${scope})`)
+        console.log(`🗑️ File removed: ${relative(repoRoot, filePath)} (scope: ${scope})`)
       }
+      scheduleBuild()
     })
     .on('error', (error) => {
-      console.error('❌ 监听错误:', error)
+      console.error('❌ Watch error:', error)
     })
 
-  // 处理进程信号，优雅关闭
+  // Handle process signals and graceful shutdown
   const handleShutdown = async (signal: string) => {
-    console.log(`\n⏹️ 收到 ${signal} 信号，正在关闭监听...`)
+    console.log(`\n⏹️ Received ${signal}, shutting down watcher...`)
 
-    // 清理防抖计时器
+    // Clear debounce timer
     if (debounceTimer) {
       clearTimeout(debounceTimer)
     }
 
-    // 关闭监听器
+    // Close watcher
     await watcher.close()
-    console.log('✅ 监听已关闭')
+    console.log('✅ Watcher closed')
+
+    // Stop Node-RED
+    try {
+      await redLauncher.cleanup()
+      console.log('✅ Node-RED stopped')
+    }
+    catch (err) {
+      console.error('❌ Failed to stop Node-RED:', err)
+    }
+
     process.exit(0)
   }
 
@@ -178,6 +219,6 @@ async function run() {
 }
 
 run().catch((error) => {
-  console.error('❌ 启动失败:', error)
+  console.error('❌ Failed to start:', error)
   process.exit(1)
 })

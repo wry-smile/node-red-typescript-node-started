@@ -72,7 +72,7 @@ export function copyFilesPlugin(options: CopyPluginOptions): TsUpPlugin {
           copyFileOrDir(src, targetDest)
         }
         catch (error) {
-          console.error(`[copy-files-plugin] 复制失败: ${src}`, error)
+          console.error(`[copy-files-plugin] copy failed: ${src}`, error)
         }
       }
     },

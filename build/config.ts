@@ -16,35 +16,35 @@ export type OutputConfig
  */
 export interface BuildConfig {
   /**
-   * 要构建的包类型
+   * Packages to build
    * @default ['nodes', 'plugins']
    */
   kinds?: PackageKind[]
 
   /**
-   * 允许构建的包名称
-   * 如果指定，只有在此列表中的包才会被构建
+   * Allowed package names to build
+   * If specified, only packages in this list will be built
    * @example { nodes: ['simple-node'], plugins: ['simple-plugin'] }
    */
   allow?: Record<PackageKind, string[]>
 
   /**
-   * 忽略的包名称
-   * 在此列表中的包将被跳过
+   * Ignored package names
+   * If specified, packages in this list will be skipped
    * @example { nodes: ['test-node'], plugins: [] }
    */
   ignore?: Record<PackageKind, string[]>
 
   /**
-   * 输出目录基础路径
+   * Output directory base path
    * @default '<repoRoot>/dist'
    */
   outDir?: string
 
   /**
-   * dist 输出类型
-   * - merge: 维持 nodes/plugins 结构，并在 dist 根写合并 package.json
-   * - flat: 提升 nodes/plugins 下的包至 dist 根，不生成合并 package.json
+   * dist output type
+   * - merge: Maintain nodes/plugins structure, and write merged package.json at dist root
+   * - flat: Move packages under nodes/plugins to dist root, without generating merged package.json
    */
   output?: OutputConfig
 }
@@ -55,7 +55,7 @@ export interface PackageRootType {
 }
 
 /**
- * 默认配置
+ * Default configuration
  */
 export const DEFAULT_CONFIG: Required<BuildConfig> = {
   kinds: ['nodes', 'plugins'],
@@ -77,7 +77,7 @@ export const PACKAGE_ROOTS: PackageRootType[] = [
 ]
 
 /**
- * 合并配置
+ * merge configuration
  */
 export function mergeConfig(userConfig?: Partial<BuildConfig>): Required<BuildConfig> {
   const config = { ...DEFAULT_CONFIG, ...userConfig }

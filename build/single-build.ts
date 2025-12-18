@@ -4,6 +4,7 @@ import type { PackageKind } from './utils'
 import { resolve } from 'node:path'
 import { build } from 'tsup'
 import { clientBuildPlugin, copyFilesPlugin } from './plugins'
+import { mergeManifestPlugin } from './plugins/merge-manifest'
 import { pathExists, pkgNameFromPath } from './utils'
 
 export interface SingleBuildOptions {
@@ -45,7 +46,7 @@ export function singleBuild(options: SingleBuildOptions, userConfig: Required<Bu
     clean: true,
     noExternal: [/.*/],
     plugins: [
-      clientBuildPlugin({ entryRoot, scope, outputRoot }),
+      clientBuildPlugin({ entryRoot, scope, outputRoot, kind }),
       copyFilesPlugin({
         files: [
           {
@@ -64,7 +65,9 @@ export function singleBuild(options: SingleBuildOptions, userConfig: Required<Bu
         entryRoot,
         outputRoot,
         scope,
+        kind,
       }),
+      mergeManifestPlugin({ scope, kind, entryRoot, outputRoot }, userConfig),
     ],
   }
 }
