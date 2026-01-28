@@ -1,0 +1,21 @@
+{
+  "name": "flowup-simple-node",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "scripts": {
+    "build": "flowup build"
+  },
+  "devDependencies": {
+    "@wry-smile/flowup": "workspace:*"
+  },
+  "node-red": {
+    "scope": "simple-node",
+    "nodes": {
+      "simple-node": "simple-node.js"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "flowup-{{ kebabCase name }}",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "scripts": {
+    "build": "flowup build"
+  },
+  "devDependencies": {
+    "@wry-smile/flowup": "workspace:*"
+  },
+  "node-red": {
+    "scope": "{{ kebabCase name }}",
+    "nodes": {
+      "{{ kebabCase name }}": "{{ kebabCase name }}.js"
+    }
+  }
+}
