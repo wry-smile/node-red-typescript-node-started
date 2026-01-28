@@ -18,8 +18,8 @@
   "scripts": {
     "release": "pnpm -F @wry-smile/flowup release",
     "build": "pnpm -F @wry-smile/flowup build",
-    "gen:nodes": "flowup gen --outputDir ./packages/nodes --type node",
-    "gen:plugin": "flowup gen --outputDir ./packages/plugins --type plugin"
+    "gen:nodes": "flowup gen --outputDir ./packages/nodes --type node --locales en-US,zh-CN",
+    "gen:plugin": "flowup gen --outputDir ./packages/plugins --type plugin --locales en-US,zh-CN"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",

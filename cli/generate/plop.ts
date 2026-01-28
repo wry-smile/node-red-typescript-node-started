@@ -16,6 +16,10 @@ const languageMap = {
   'zh-TW': 'Chinese (Traditional)',
 }
 
+function getEnv(key: string) {
+  return process.env[`FLOWUP_GEN_${key.toUpperCase()}`]
+}
+
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const localizedLocales = Object.keys(languageMap).map((value) => {
@@ -24,13 +28,21 @@ const localizedLocales = Object.keys(languageMap).map((value) => {
 })
 
 export default async function (plop: NodePlopAPI) {
+  const outputDir = getEnv('outputDir')
+  const type = getEnv('type')
+  const name = getEnv('name')
+  const locales = getEnv('locales')
+    ?.split(',')
+    .map(locale => locale.trim())
+    .filter(locale => locale !== '') || []
+
   plop.setGenerator('Scaffold', {
     prompts: [
       {
         type: 'input',
         name: 'outputDir',
         message: 'Please enter output directory (relative to project root, optional)?',
-        default: '.',
+        default: outputDir || '.',
       },
       {
         type: 'list',
@@ -40,18 +52,20 @@ export default async function (plop: NodePlopAPI) {
           { name: 'Node', value: 'node' },
           { name: 'Plugin', value: 'plugin' },
         ],
+        default: type || 'node',
       },
       {
         type: 'input',
         name: 'name',
         message: 'Please enter the {{ type }} name?',
+        default: name || '',
       },
       {
         type: 'checkbox',
         name: 'locales',
         message: 'Please select internationalization configuration.',
         choices: localizedLocales,
-        default: ['en-US', 'zh-CN'],
+        default: locales.length > 0 ? locales : ['en-US', 'zh-CN'],
       },
     ],
     actions(data) {
