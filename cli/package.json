@@ -1,0 +1,51 @@
+{
+  "name": "@wry-smile/flowup",
+  "type": "module",
+  "version": "1.0.0",
+  "packageManager": "pnpm@10.28.2",
+  "description": "Node-RED TypeScript Node Starter CLI",
+  "author": "@wry-smile",
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "keywords": [
+    "Node-RED",
+    "TypeScript",
+    "Node",
+    "Starter",
+    "CLI"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "bin": {
+    "flowup": "./bin/flowup.js"
+  },
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "release": "bumpp"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "catalog:",
+    "@vitejs/plugin-vue": "catalog:",
+    "commander": "catalog:",
+    "micromatch": "catalog:",
+    "plop": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-singlefile": "catalog:"
+  },
+  "devDependencies": {
+    "@types/micromatch": "catalog:",
+    "bumpp": "catalog:",
+    "tsdown": "catalog:"
+  }
+}
